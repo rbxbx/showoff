@@ -13,6 +13,12 @@ rescue LoadError
 end
 
 begin
+  require 'mini_magick'
+rescue LoadError
+  puts 'image sizing disabled - install MiniMagick'
+end unless defined?(Magick)
+
+begin
   require 'princely'
 rescue LoadError
   puts 'pdf generation disabled - install princely'
@@ -142,6 +148,16 @@ class ShowOff < Sinatra::Application
         if !cached_image_size.key?(path)
           img = Magick::Image.ping(path).first
           cached_image_size[path] = [img.columns, img.rows]
+        end
+        cached_image_size[path]
+      end
+    end
+
+    unless defined?(Magick) && !defined?(MiniMagick)
+      def get_image_size(path)
+        if !cached_image_size.key?(path)
+          img = MiniMagick::Image.from_file(path)
+          cached_image_size[path] = [img[:height], img[:width]]
         end
         cached_image_size[path]
       end

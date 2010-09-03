@@ -17,4 +17,4 @@
 !SLIDE center transition=scrollUp
 .notes another dark side
 
-![octocat](octocat.png)
+![octocat](octocat.png =550x550)
